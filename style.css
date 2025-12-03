@@ -1,0 +1,660 @@
+/* ---------- Общие сбросы и переменные ---------- */
+:root{
+  --panel-width: 536px;
+  --panel-bg: rgba(255,255,255,0.06);
+  --panel-border: rgba(255,255,255,0.14);
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.7);
+  --muted-weak: rgba(255,255,255,0.18);
+  --search-z: 1000;
+  --content-z: 30;
+  --hourly-scroll-height: 100px;
+  --blur-radius: 9.5px;
+  --base-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*   Поля документа */
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--base-font);
+  background: #000; /* запасной фон при загрузке изображения */
+  overflow: hidden;
+}
+
+/* ---------- Корневой контейнер ---------- */
+.home-desktop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Фоновая картинка */
+.home-desktop .bg-weather {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.home-desktop .img {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Размытая боковая панель (правый блок) */
+.home-desktop .bg-blur {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--panel-width);
+  max-width: 40%;
+  height: 100%;
+  background-color: var(--panel-bg);
+  border-left: 5px solid var(--panel-border);
+  backdrop-filter: blur(var(--blur-radius)) brightness(100%);
+  -webkit-backdrop-filter: blur(var(--blur-radius)) brightness(100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- Текстовые блоки: общий стиль ---------- */
+.home-desktop .text-wrapper,
+.home-desktop .text-wrapper-2,
+.home-desktop .text-wrapper-4,
+.home-desktop .text-wrapper-5,
+.home-desktop .p,
+.home-desktop .thunderstorm-with,
+.home-desktop .text-wrapper-9,
+.home-desktop .text-wrapper-10,
+.home-desktop .text-wrapper-11,
+.home-desktop .text-wrapper-12,
+.home-desktop .text-wrapper-13,
+.home-desktop .text-wrapper-14,
+.home-desktop .text-wrapper-15 {
+  color: var(--text);
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+  z-index: var(--content-z);
+  pointer-events: auto;
+}
+
+/* Текущая температура (сильный акцент) */
+.home-desktop .text-wrapper {
+  position: absolute;
+  top: 556px;
+  left: 120px;
+  width: 192px;
+  font-size: 143px;
+  letter-spacing: -11.44px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+}
+
+/* Город + дата */
+.home-desktop .group {
+  position: absolute;
+  top: 594px;
+  left: 322px;
+  width: auto; /* было фиксированное 231px — изменено, чтобы вместить страну */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Название города: разрешаем перенос строк и видимость переполнения */
+.home-desktop .text-wrapper-2 {
+  font-family: "Roboto-Regular", Helvetica;
+  font-size: 60px;
+  width: auto;
+  max-width: 420px; /* ограничение для сохранения верстки */
+  height: auto;
+  overflow: visible;
+  white-space: normal; /* было nowrap — позволяем показать страну на новой строке */
+  line-height: 1.05;
+}
+
+/* Дата / день недели — увеличиваем контраст (яркость) */
+.home-desktop .p {
+  margin-left: 5px;
+  width: 204px;
+  height: 21px;
+  font-size: 18px;
+  color: var(--text-muted); /* раньше --muted-weak (слишком тускло) */
+}
+
+/* Заголовки правой панели */
+.home-desktop .text-wrapper-4,
+.home-desktop .text-wrapper-5 {
+  position: absolute;
+  font-size: 18px;
+  color: var(--text);
+  font-family: "Roboto-Regular", Helvetica;
+  white-space: nowrap;
+}
+
+/* Позиции заголовков */
+.home-desktop .text-wrapper-4 { top: 132px; right: 949px; left: auto; }
+.home-desktop .text-wrapper-5 { top: 450px; right: 949px; left: auto; }
+
+/* Детали погоды — контейнер */
+.home-desktop .frame {
+  position: absolute;
+  top: 205px;
+  right: 949px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 220px;
+  align-items: flex-start;
+  z-index: var(--content-z);
+  box-sizing: border-box;
+}
+
+/* Описание состояния */
+.home-desktop .thunderstorm-with {
+  width: 354px;
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--text);
+}
+
+/* Строки деталей (макс/мин, влажность, облачность, ветер) */
+.home-desktop .group-4,
+.home-desktop .group-6,
+.home-desktop .group-8,
+.home-desktop .group-10 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 354px;
+  box-sizing: border-box;
+  height: auto;
+}
+
+/* Подгруппы внутри строк */
+.home-desktop .group-5,
+.home-desktop .group-7,
+.home-desktop .group-9,
+.home-desktop .group-11 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+/* Мета/значения в строках */
+.home-desktop .text-wrapper-9,
+.home-desktop .text-wrapper-11,
+.home-desktop .text-wrapper-13,
+.home-desktop .text-wrapper-14 {
+  flex: 1 1 auto;
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 18px;
+}
+
+.home-desktop .text-wrapper-10,
+.home-desktop .text-wrapper-12,
+.home-desktop .text-wrapper-15 {
+  flex: 0 0 auto;
+  text-align: right;
+  color: var(--text);
+  font-size: 18px;
+}
+
+/* ---------- Поиск ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.search-form {
+  position: absolute;
+  top: 41px;
+  right: 40px;
+  width: 371px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  z-index: var(--search-z);
+  pointer-events: auto;
+}
+
+.search-input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text);
+  color: var(--text);
+  font-size: 20px;
+  padding: 0;
+  outline: none;
+  position: relative;
+}
+
+.search-input::placeholder { color: rgba(255,255,255,0.7); }
+
+.search-input:focus {
+  border-bottom-color: var(--text);
+  outline: 2px solid rgba(255,255,255,0.28);
+  outline-offset: 2px;
+}
+
+.search-button {
+  position: absolute;
+  right: 0;
+  top: 9px;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 20px;
+}
+
+.search-button:hover { opacity: 0.85; }
+.search-button:focus { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+
+/* Иконка поиска (фон) */
+.home-desktop .group-2 {
+  position: absolute;
+  top: 50px;
+  right: 56px;
+  width: 28px;
+  height: 28px;
+  background-image: url(./img/fa-search.svg);
+  background-size: 100% 100%;
+  z-index: var(--search-z);
+}
+
+/* ---------- Почасовой прогноз (горизонтальный скролл) ---------- */
+.hourly-scroll {
+  position: absolute;
+  top: 480px;
+  right: 40px;
+  width: 354px;
+  max-width: calc(100% - 80px);
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  z-index: 20;
+  background: transparent;
+  touch-action: pan-x;
+  height: var(--hourly-scroll-height);
+}
+
+.hourly-scroll::-webkit-scrollbar { height: 8px; }
+.hourly-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px;
+}
+
+.hourly-item {
+  flex: 0 0 auto;
+  width: 84px;
+  min-width: 84px;
+  height: 84px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 13px;
+  scroll-snap-align: center;
+  text-align: center;
+}
+
+.hourly-item .hour { font-size: 13px; color: var(--text); margin-bottom: 6px; white-space: nowrap; }
+.hourly-item .temp { font-size: 18px; font-weight: 500; color: var(--text); }
+.hourly-item .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* ---------- Утилиты ---------- */
+.hidden { display: none !important; }
+
+.loader,
+.error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  display: none;
+  max-width: 300px;
+  text-align: center;
+}
+
+.loader { background: rgba(0,0,0,0.8); }
+.error { background: rgba(220,53,69,0.9); }
+
+/* ---------- Правила выравнивания правой панели ---------- */
+/* Обеспечиваем, чтобы перечисленные элементы располагались относительно правого края */
+.home-desktop .rectangle,
+.home-desktop .div,
+.home-desktop .frame,
+.search-form,
+.home-desktop .text-wrapper-4,
+.home-desktop .text-wrapper-5,
+.home-desktop .group-5,
+.hourly-scroll {
+  right: 40px;
+  left: auto;
+}
+
+/* ---------- Адаптивность (с сохранением оригинальной логики) ---------- */
+
+/* Большие экраны до 1440px */
+@media (max-width: 1440px) {
+  .home-desktop .bg-weather,
+  .home-desktop .img {
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+  }
+
+  .home-desktop .bg-blur { width: 40%; max-width: var(--panel-width); }
+
+  .search-form,
+  .home-desktop .text-wrapper-4,
+  .home-desktop .frame,
+  .home-desktop .text-wrapper-5,
+  .hourly-scroll {
+    right: 30px;
+  }
+
+  .home-desktop .group-2 { right: 46px; }
+
+  .home-desktop .text-wrapper { left: 5%; }
+  .home-desktop .group { left: calc(5% + 202px); }
+}
+
+/* Планшеты до 1024px */
+@media (max-width: 1024px) {
+  .home-desktop .bg-blur { width: 45%; }
+
+  .home-desktop .text-wrapper {
+    font-size: 110px;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+  }
+
+  .home-desktop .group {
+    top: auto;
+    left: 5%;
+    width: auto;
+    margin-top: 12px;
+  }
+
+  .home-desktop .text-wrapper-2 { font-size: 48px; }
+  .home-desktop .p { font-size: 16px; }
+
+  .search-form { width: 300px; }
+  .home-desktop .frame { width: 300px; top: 180px; }
+  .hourly-scroll { width: 300px; top: 420px; }
+  .home-desktop .text-wrapper-5 { top: 380px; }
+
+  .thunderstorm-with,
+  .group-4,
+  .group-6,
+  .group-8,
+  .group-10 { width: 300px; }
+}
+
+/* Мобильные до 768px */
+@media (max-width: 768px) {
+  .home-desktop {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .home-desktop .bg-blur { display: none; }
+
+  .home-desktop .text-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 80px;
+    margin: 80px 0 20px;
+    letter-spacing: -5px;
+  }
+
+  .home-desktop .group {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .home-desktop .text-wrapper-2 { width: 100%; text-align: center; font-size: 36px; }
+  .home-desktop .p { margin-left: 0; width: 100%; text-align: center; font-size: 14px; }
+
+  .search-form {
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  .home-desktop .text-wrapper-4,
+  .home-desktop .frame,
+  .home-desktop .text-wrapper-5,
+  .hourly-scroll {
+    position: relative;
+    width: 90%;
+    margin: 20px auto;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .home-desktop .text-wrapper-5 { margin: 30px 0 10px; }
+
+  .home-desktop .frame { gap: 20px; max-height: none; margin-bottom: 20px; }
+  .hourly-scroll { width: 90%; height: 90px; margin: 0 auto 30px; padding: 8px; }
+
+  .home-desktop .group-2 { right: 5%; top: 50%; transform: translateY(-50%); position: absolute; }
+}
+
+/* Очень маленькие экраны до 480px */
+@media (max-width: 480px) {
+  .home-desktop .text-wrapper { font-size: 60px; margin-top: 60px; }
+  .home-desktop .text-wrapper-2 { font-size: 28px; }
+  .home-desktop .p { font-size: 12px; }
+
+  .search-form { width: 95%; }
+  .home-desktop .text-wrapper-4,
+  .home-desktop .frame,
+  .home-desktop .text-wrapper-5,
+  .hourly-scroll { width: 95%; }
+
+  .hourly-item {
+    width: 70px;
+    min-width: 70px;
+    height: 70px;
+    font-size: 11px;
+    padding: 5px;
+  }
+
+  .hourly-item .temp { font-size: 16px; }
+  .hourly-item .desc { font-size: 10px; }
+
+  .thunderstorm-with,
+  .text-wrapper-9,
+  .text-wrapper-10,
+  .text-wrapper-11,
+  .text-wrapper-12,
+  .text-wrapper-13,
+  .text-wrapper-14,
+  .text-wrapper-15 { font-size: 16px; }
+}
+
+/* Ландшафт на мобильных */
+@media (max-height: 600px) and (orientation: landscape) {
+  .home-desktop .text-wrapper { font-size: 70px; margin: 20px 0 10px; }
+  .home-desktop .group, .home-desktop .frame { margin-bottom: 15px; }
+  .hourly-scroll { height: 70px; margin-bottom: 15px; }
+  .hourly-item .desc { display: none; }
+  .hourly-item { height: 60px; }
+}
+
+/* Сверхвысокие экраны */
+@media (min-width: 1920px) {
+  .home-desktop .bg-blur { width: 30%; max-width: 600px; }
+  .search-form, .home-desktop .frame, .hourly-scroll { width: 400px; }
+  .home-desktop .text-wrapper-4, .home-desktop .text-wrapper-5 {
+    right: calc((100% - 400px) / 2);
+  }
+}
+
+/* Темная схема и reduced motion */
+@media (prefers-color-scheme: dark) {
+  .search-input::placeholder { color: rgba(255,255,255,0.5); }
+  .hourly-item { background: rgba(255,255,255,0.03); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* iOS Safari fix */
+@supports (-webkit-touch-callout: none) {
+  .home-desktop { height: -webkit-fill-available; }
+  .hourly-scroll { -webkit-overflow-scrolling: touch; }
+}
+
+/* Гарантируем, что элементы поиска выше всех */
+.search-form,
+.search-input,
+.search-button {
+  z-index: 1000 !important;
+  pointer-events: auto !important;
+}
+
+.search-input {
+  position: relative !important;
+}
+
+/* Поместить контент поверх .bg-blur */
+.home-desktop .text-wrapper,
+.home-desktop .text-wrapper-2,
+.home-desktop .text-wrapper-4,
+.home-desktop .text-wrapper-5,
+.home-desktop .group,
+.home-desktop .frame,
+.home-desktop .p {
+  z-index: 30 !important;
+  pointer-events: auto !important;
+}
+
+/* Выровнять строки деталей погоды на одном уровне */
+.home-desktop .frame {
+  /* гарантия, что контейнер остаётся колонкой, но строки внутри — флексы */
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+/* каждая строка (макс/мин, влажность, облачность, ветер) — флекс-строка, на одном вертикальном уровне */
+.home-desktop .group-4,
+.home-desktop .group-6,
+.home-desktop .group-8,
+.home-desktop .group-10 {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;   /* выравнивание по вертикали */
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+}
+
+/* внутренние подгруппы убираем абсолют и переводим в поток */
+.home-desktop .group-5,
+.home-desktop .group-7,
+.home-desktop .group-9,
+.home-desktop .group-11 {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+}
+
+/* метки (левая) растягиваются, значения (правая) — фиксированы справа */
+.home-desktop .text-wrapper-9,
+.home-desktop .text-wrapper-11,
+.home-desktop .text-wrapper-13,
+.home-desktop .text-wrapper-14 {
+  flex: 1 1 auto !important;
+  text-align: left !important;
+  width: auto !important;
+}
+
+.home-desktop .text-wrapper-10,
+.home-desktop .text-wrapper-12,
+.home-desktop .text-wrapper-15 {
+  flex: 0 0 auto !important;
+  text-align: right !important;
+  width: auto !important;
+} 
