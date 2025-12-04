@@ -19,6 +19,8 @@
 
 [Посмотреть живую демонстрацию](#) 
 https://littleraccoonn.github.io/WebFinal/
+
+[Посмотреть фигму](#) 
 https://www.figma.com/design/m3PMblakTfE5uiysWA0ITR/Weather-Web--Community-?node-id=129-5339&t=BcYHAjcJ9kxw9Fil-1
 
 
