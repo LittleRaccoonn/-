@@ -154,7 +154,7 @@ html, body {
   top: 205px;
   right: 949px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   gap: 12px;
   max-height: 220px;
   align-items: flex-start;
@@ -449,6 +449,12 @@ html, body {
     position: relative;
     height: auto;
     overflow: visible;
+    
+  }
+  /* Сдвигаем блок Today's Weather Forecast вниз (примерно к середине) */
+  .text-wrapper-5 {
+    margin-top: 200px; /* можешь менять на 180 / 220 / 250px, как тебе подходит */
+    text-align: center; /* если нужно центрирование */
   }
 
   .home-desktop .bg-blur { display: none; }
@@ -553,7 +559,7 @@ html, body {
   .home-desktop .bg-blur { width: 30%; max-width: 600px; }
   .search-form, .home-desktop .frame, .hourly-scroll { width: 400px; }
   .home-desktop .text-wrapper-4, .home-desktop .text-wrapper-5 {
-    right: calc((100% - 400px) / 2);
+    /* right: calc((100% - 400px) / 2); */
   }
 }
 
